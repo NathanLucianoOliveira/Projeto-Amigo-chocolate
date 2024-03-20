@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "AMIGO_CHOCOLATE",
-    "slug": "AMIGO_CHOCOLATE",
+    "name": "my-app",
+    "slug": "my-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
