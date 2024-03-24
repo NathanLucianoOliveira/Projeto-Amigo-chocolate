@@ -4,8 +4,10 @@ import { Text, TextInput, View, StyleSheet, TouchableOpacity, Alert } from 'reac
 import { StackTypes } from '../../routes/stack';
 import UserService from '../../services/UserService/UserService';
 
-const Login = () => {
-  const [login, setLogin] = useState<string>('');
+const Cadastro = () => {
+  const [email, setEmail] = useState<string>('');
+  const [nome, setNome] = useState<string>('');
+  const [sobrenome, setSobrenome] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [usernameError, setUsernameError] = useState(false);
 
@@ -13,29 +15,26 @@ const Login = () => {
 
   const navigation = useNavigation<StackTypes>();
 
-  const handleNavegarCadastro = () => {
-    navigation.navigate('Cadastro');
+  const handleNavegarLogin = () => {
+    navigation.navigate('Login');
   };
-
-  const handleNavegarEsqueceuSenha = () => {
-    navigation.navigate('EsqueceuSenha');
-  }
 
   const handleLogin = async () => {
 
-    if (!login) {
-      setUsernameError(true);
-      return;
-    } else {
-      setUsernameError(false);
-    }
-
-    const user = await userService.login(login, password);
+    const user = await userService.addUser({
+      email,
+      firstName: nome,
+      lastName: sobrenome,
+      password,
+      username: '',
+    });
 
     if (user) {
-      alert('Usuário autenticado com sucesso ' + user.username);
-      setLogin('');
+      alert('Usuário autenticado com sucesso ' + nome);
+      setEmail('');
       setPassword('');
+      setNome('');
+      setSobrenome('');
     } else {
       alert('Usuário e/ou senha inválidos');
     }
@@ -43,12 +42,24 @@ const Login = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>Cadastro</Text>
       <TextInput
-        style={[styles.input, usernameError && styles.errorInput]} // Aplicar estilo de erro se usernameError for true
-        placeholder="Login"
-        onChangeText={setLogin}
-        value={login}
+        style={[styles.input, usernameError && styles.errorInput]}
+        placeholder="Nome"
+        onChangeText={setNome}
+        value={nome}
+      />
+      <TextInput
+        style={[styles.input, usernameError && styles.errorInput]}
+        placeholder="Sobrenome"
+        onChangeText={setSobrenome}
+        value={sobrenome}
+      />
+      <TextInput
+        style={[styles.input, usernameError && styles.errorInput]}
+        placeholder="Email"
+        onChangeText={setEmail}
+        value={email}
       />
       <TextInput
         style={styles.input}
@@ -58,13 +69,10 @@ const Login = () => {
         value={password}
       />
       <TouchableOpacity onPress={handleLogin} style={styles.button} activeOpacity={0.1}>
-        <Text style={styles.buttonText}>Entrar</Text>
+        <Text style={styles.buttonText}>Cadastrar</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={handleNavegarCadastro} style={styles.button} activeOpacity={0.1}>
-        <Text style={styles.buttonText}>Ir para cadastro</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleNavegarEsqueceuSenha} style={styles.button} activeOpacity={0.1}>
-        <Text style={styles.buttonText}>Esqueceu a senha?</Text>
+      <TouchableOpacity onPress={handleNavegarLogin} style={styles.button} activeOpacity={0.1}>
+        <Text style={styles.buttonText}>Ir para login</Text>
       </TouchableOpacity>
     </View>
   );
@@ -102,7 +110,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#007bff',
-    marginTop: 10,
+    marginTop: 15,
   },
   buttonText: {
     color: '#fff',
@@ -111,4 +119,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default Login;
+export default Cadastro;
